@@ -1,5 +1,10 @@
 import re
 import json
+from unidecode import unidecode
+
+
+def remove_non_ascii(text):
+    return unidecode(text)
 
 #sanitize the code for saving to a file on the OS
 def get_valid_filename(s):
