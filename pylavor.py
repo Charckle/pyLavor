@@ -1,10 +1,6 @@
 import re
 import json
-from unidecode import unidecode
-
-
-def remove_non_ascii(text):
-    return unidecode(text)
+import ctypes, os
 
 #sanitize the code for saving to a file on the OS
 def get_valid_filename(s):
@@ -23,16 +19,14 @@ def get_valid_filename(s):
 
     return re.sub(r'(?u)[^-\w.]', '', s)
 
-def json_write(filename, dictio):
+
+def json_write(filename, dictio, sanitation=True):
+    
+    if sanitation == True:
+        filename = get_valid_filename(filename)
     
     with open(f'{filename}', 'w') as outfile:
         json.dump(dictio, outfile)
-
-#json write with sanitized filename
-def json_write_san(filename, dictio):
-    sanitized_filename = get_valid_filename(filename)
-    
-    json_write(sanitized_filename, dictio)
 
 def json_read(filename):
     
@@ -40,3 +34,13 @@ def json_read(filename):
         data = json.load(json_file)
         
         return data
+
+def isAdmin():
+    try:
+        is_admin = (os.getuid() == 0)
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+    return is_admin
+
+if __name__ == "__main__":
+    #print(isAdmin())
