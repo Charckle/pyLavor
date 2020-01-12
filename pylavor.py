@@ -1,6 +1,7 @@
 import re
 import json
 import ctypes, os
+import logging
 
 #sanitize the code for saving to a file on the OS
 def get_valid_filename(s):
@@ -20,17 +21,25 @@ def get_valid_filename(s):
     return re.sub(r'(?u)[^-\w.]', '', s)
 
 
-def json_write(filename, dictio, sanitation=True):
+def json_write(location, filename, dictio, sanitation=True):
     
+    location = location.strip()
+
     if sanitation == True:
         filename = get_valid_filename(filename)
     
-    with open(f'{filename}', 'w') as outfile:
+    location_filename = location + "/" + filename
+    logging.debug(f"Saving to: {location_filename}")
+
+    with open(f'{location_filename}', 'w') as outfile:
         json.dump(dictio, outfile)
 
-def json_read(filename):
+def json_read(location, filename):
     
-    with open(f'{filename}') as json_file:
+    location_filename = location + "/" + filename
+    logging.debug(f"Reading from: {location_filename}")
+
+    with open(f'{location_filename}') as json_file:
         data = json.load(json_file)
         
         return data
@@ -43,4 +52,5 @@ def isAdmin():
     return is_admin
 
 if __name__ == "__main__":
+    pass
     #print(isAdmin())
