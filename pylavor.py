@@ -3,6 +3,8 @@ import json
 import ctypes, os
 import logging
 
+from unidecode import unidecode
+
 #sanitize the code for saving to a file on the OS
 def get_valid_filename(s):
 
@@ -16,7 +18,7 @@ def get_valid_filename(s):
     'johns_portrait_in_2004.jpg'
     """
 
-    s = str(s).strip().replace(' ', '_')
+    s = unidecode(str(s).strip().replace(' ', '_'))
 
     return re.sub(r'(?u)[^-\w.]', '', s)
 
@@ -60,4 +62,4 @@ def check_file_exists(filenameLocation):
 
 if __name__ == "__main__":
     pass
-    #print(isAdmin())
+    #print(get_valid_filename("Čirkulacija je zakođ"))
